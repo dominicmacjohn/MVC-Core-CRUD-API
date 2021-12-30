@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MVC_Core_CRUD_API.Data;
 using MVC_Core_CRUD_API.Extensions;
 
 namespace MVC_Core_CRUD_API
@@ -26,14 +27,14 @@ namespace MVC_Core_CRUD_API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //Added extension methods for registrations
-            #region Registrations methods
             
+            //Add extension methods for registrations
             services.RegisterRepositories();
             services.RegisterInMemoryDatabase();
-            
-            #endregion
-            
+
+            //Add Automapper
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -60,6 +61,9 @@ namespace MVC_Core_CRUD_API
             {
                 endpoints.MapControllers();
             });
+            
+            //Seed database
+            DbInit.Seed(app);
         }
     }
 }
